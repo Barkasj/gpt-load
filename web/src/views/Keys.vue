@@ -21,7 +21,7 @@ async function loadGroups() {
   try {
     loading.value = true;
     groups.value = await keysApi.getGroups();
-    // 选择默认分组
+    // Pilih grup default
     if (groups.value.length > 0 && !selectedGroup.value) {
       const groupId = route.query.groupId;
       const found = groups.value.find(g => String(g.id) === String(groupId));
@@ -46,14 +46,14 @@ function handleGroupSelect(group: Group | null) {
 async function handleGroupRefresh() {
   await loadGroups();
   if (selectedGroup.value) {
-    // 重新加载当前选中的分组信息
+    // Muat ulang informasi grup yang dipilih saat ini
     handleGroupSelect(groups.value.find(g => g.id === selectedGroup.value?.id) || null);
   }
 }
 
 async function handleGroupRefreshAndSelect(targetGroupId: number) {
   await loadGroups();
-  // 刷新完成后，切换到指定的分组
+  // Setelah penyegaran selesai, alihkan ke grup yang ditentukan
   const targetGroup = groups.value.find(g => g.id === targetGroupId);
   if (targetGroup) {
     handleGroupSelect(targetGroup);
@@ -61,10 +61,10 @@ async function handleGroupRefreshAndSelect(targetGroupId: number) {
 }
 
 function handleGroupDelete(deletedGroup: Group) {
-  // 从分组列表中移除已删除的分组
+  // Hapus grup yang dihapus dari daftar grup
   groups.value = groups.value.filter(g => g.id !== deletedGroup.id);
 
-  // 如果删除的是当前选中的分组，则切换到第一个分组
+  // Jika grup yang dihapus adalah grup yang dipilih saat ini, alihkan ke grup pertama
   if (selectedGroup.value?.id === deletedGroup.id) {
     handleGroupSelect(groups.value.length > 0 ? groups.value[0] : null);
   }
