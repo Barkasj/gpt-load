@@ -15,7 +15,7 @@ interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  placeholder: "多个密钥请用英文逗号 , 分隔",
+  placeholder: "Pisahkan beberapa kunci dengan koma bahasa Inggris",
   size: "small",
 });
 
@@ -81,7 +81,7 @@ function confirmGenerateKeys() {
     emit("update:modelValue", updatedValue);
     showKeyGeneratorModal.value = false;
 
-    message.success(`成功生成 ${keyCount.value} 个密钥`);
+    message.success(`Berhasil membuat ${keyCount.value} kunci`);
   } finally {
     isGenerating.value = false;
   }
@@ -91,7 +91,7 @@ function confirmGenerateKeys() {
 async function copyProxyKeys() {
   const proxyKeys = props.modelValue || "";
   if (!proxyKeys.trim()) {
-    message.warning("暂无密钥可复制");
+    message.warning("Tidak ada kunci untuk disalin");
     return;
   }
 
@@ -104,9 +104,9 @@ async function copyProxyKeys() {
 
   const success = await copy(formattedKeys);
   if (success) {
-    message.success("密钥已复制到剪贴板");
+    message.success("Kunci disalin ke clipboard");
   } else {
-    message.error("复制失败，请手动复制");
+    message.error("Gagal menyalin, silakan salin secara manual");
   }
 }
 
@@ -131,13 +131,13 @@ function handleInput(value: string) {
             <template #icon>
               <n-icon :component="Key" />
             </template>
-            生成
+            Hasilkan
           </n-button>
           <n-button text type="tertiary" :size="size" @click="copyProxyKeys" style="opacity: 0.7">
             <template #icon>
               <n-icon :component="Copy" />
             </template>
-            复制
+            Salin
           </n-button>
         </n-space>
       </template>
@@ -147,28 +147,28 @@ function handleInput(value: string) {
     <n-modal
       v-model:show="showKeyGeneratorModal"
       preset="dialog"
-      title="生成代理密钥"
-      positive-text="确认生成"
-      negative-text="取消"
+      title="Hasilkan Kunci Proksi"
+      positive-text="Konfirmasi Pembuatan"
+      negative-text="Batal"
       :positive-button-props="{ loading: isGenerating }"
       @positive-click="confirmGenerateKeys"
     >
       <n-space vertical :size="16">
         <div>
           <p style="margin: 0 0 8px 0; color: #666; font-size: 14px">
-            请输入要生成的密钥数量（最大100个）：
+            Silakan masukkan jumlah kunci yang akan dibuat (maksimal 100):
           </p>
           <n-input-number
             v-model:value="keyCount"
             :min="1"
             :max="100"
-            placeholder="请输入数量"
+            placeholder="Silakan masukkan jumlah"
             style="width: 100%"
             :disabled="isGenerating"
           />
         </div>
         <div style="color: #999; font-size: 12px; line-height: 1.4">
-          <p>生成的密钥将会插入到当前输入框内容的后面，以逗号分隔</p>
+          <p>Kunci yang dihasilkan akan dimasukkan di akhir konten kotak input saat ini, dipisahkan oleh koma</p>
         </div>
       </n-space>
     </n-modal>

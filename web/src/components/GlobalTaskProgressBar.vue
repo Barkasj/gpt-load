@@ -46,13 +46,13 @@ async function pollOnce() {
       if (task.result) {
         const lastTask = localStorage.getItem("last_closed_task");
         if (lastTask !== task.finished_at) {
-          let msg = "任务已完成。";
+          let msg = "Tugas selesai.";
           if (task.task_type === "KEY_VALIDATION") {
             const result = task.result as import("@/types/models").KeyValidationResult;
-            msg = `密钥验证完成，处理了 ${result.total_keys} 个密钥，其中 ${result.valid_keys} 个成功，${result.invalid_keys} 个失败。请注意：验证失败并不一定拉黑该密钥，需要失败次数达到阈值才会拉黑。`;
+            msg = `Validasi kunci selesai, ${result.total_keys} kunci diproses, ${result.valid_keys} berhasil, ${result.invalid_keys} gagal. Harap dicatat: kegagalan validasi tidak selalu berarti kunci masuk daftar hitam, kunci akan masuk daftar hitam hanya jika jumlah kegagalan mencapai ambang batas.`;
           } else if (task.task_type === "KEY_IMPORT") {
             const result = task.result as import("@/types/models").KeyImportResult;
-            msg = `密钥导入完成，成功添加 ${result.added_count} 个密钥，忽略了 ${result.ignored_count} 个。`;
+            msg = `Impor kunci selesai, berhasil menambahkan ${result.added_count} kunci, mengabaikan ${result.ignored_count}.`;
           }
 
           message.info(msg, {
@@ -112,15 +112,15 @@ function handleClose() {
 
 function getTaskTitle(): string {
   if (!taskInfo.value) {
-    return "正在处理任务...";
+    return "Memproses tugas...";
   }
   switch (taskInfo.value.task_type) {
     case "KEY_VALIDATION":
-      return `正在验证分组 [${taskInfo.value.group_name}] 的密钥`;
+      return `Memvalidasi kunci untuk grup [${taskInfo.value.group_name}]`;
     case "KEY_IMPORT":
-      return `正在向分组 [${taskInfo.value.group_name}] 导入密钥`;
+      return `Mengimpor kunci ke grup [${taskInfo.value.group_name}]`;
     default:
-      return "正在处理任务...";
+      return "Memproses tugas...";
   }
 }
 </script>
@@ -140,7 +140,7 @@ function getTaskTitle(): string {
             </n-text>
           </div>
         </div>
-        <n-button quaternary circle size="small" @click="handleClose" title="隐藏进度条">
+        <n-button quaternary circle size="small" @click="handleClose" title="Sembunyikan bilah kemajuan">
           <template #icon>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
               <path

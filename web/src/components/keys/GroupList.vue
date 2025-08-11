@@ -76,7 +76,7 @@ function handleGroupCreated(group: Group) {
     <n-card class="group-list-card modern-card" :bordered="false" size="small">
       <!-- 搜索框 -->
       <div class="search-section">
-        <n-input v-model:value="searchText" placeholder="搜索分组名称..." size="small" clearable>
+        <n-input v-model:value="searchText" placeholder="Cari nama grup..." size="small" clearable>
           <template #prefix>
             <n-icon :component="Search" />
           </template>
@@ -87,7 +87,7 @@ function handleGroupCreated(group: Group) {
       <div class="groups-section">
         <n-spin :show="loading" size="small">
           <div v-if="filteredGroups.length === 0 && !loading" class="empty-container">
-            <n-empty size="small" :description="searchText ? '未找到匹配的分组' : '暂无分组'" />
+            <n-empty size="small" :description="searchText ? 'Tidak ada grup yang cocok ditemukan' : 'Tidak ada grup'" />
           </div>
           <div v-else class="groups-list">
             <div
@@ -123,7 +123,7 @@ function handleGroupCreated(group: Group) {
           <template #icon>
             <n-icon :component="Add" />
           </template>
-          创建分组
+          Buat Grup
         </n-button>
       </div>
     </n-card>

@@ -55,7 +55,7 @@ async function handleSubmit() {
     await keysApi.addKeysAsync(props.groupId, keysText.value);
     resetForm();
     handleClose();
-    window.$message.success("密钥导入任务已开始，请稍后在下方查看进度。");
+    window.$message.success("Tugas impor kunci telah dimulai, silakan periksa kemajuannya di bawah nanti.");
     appState.taskPollingTrigger++;
   } finally {
     loading.value = false;
@@ -67,7 +67,7 @@ async function handleSubmit() {
   <n-modal :show="show" @update:show="handleClose" class="form-modal">
     <n-card
       style="width: 800px"
-      :title="`为 ${groupName || '当前分组'} 添加密钥`"
+      :title="`Tambahkan kunci untuk ${groupName || 'grup saat ini'}`"
       :bordered="false"
       size="huge"
       role="dialog"
@@ -84,7 +84,7 @@ async function handleSubmit() {
       <n-input
         v-model:value="keysText"
         type="textarea"
-        placeholder="输入密钥，每行一个"
+        placeholder="Masukkan kunci, satu per baris"
         :rows="8"
         style="margin-top: 20px"
       />
@@ -93,7 +93,7 @@ async function handleSubmit() {
         <div style="display: flex; justify-content: flex-end; gap: 12px">
           <n-button @click="handleClose">取消</n-button>
           <n-button type="primary" @click="handleSubmit" :loading="loading" :disabled="!keysText">
-            创建
+            Buat
           </n-button>
         </div>
       </template>
