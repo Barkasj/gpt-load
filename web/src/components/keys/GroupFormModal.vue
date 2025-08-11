@@ -95,7 +95,7 @@ const userModifiedFields = ref({
   upstream: false,
 });
 
-// 根据渠道类型动态生成占位符提示
+// Hasilkan placeholder secara dinamis berdasarkan jenis saluran
 const testModelPlaceholder = computed(() => {
   switch (formData.channel_type) {
     case "openai":
@@ -105,7 +105,7 @@ const testModelPlaceholder = computed(() => {
     case "anthropic":
       return "claude-3-haiku-20240307";
     default:
-      return "请输入模型名称";
+      return "Silakan masukkan nama model";
   }
 });
 
@@ -118,7 +118,7 @@ const upstreamPlaceholder = computed(() => {
     case "anthropic":
       return "https://api.anthropic.com";
     default:
-      return "请输入上游地址";
+      return "Silakan masukkan alamat upstream";
   }
 });
 
@@ -129,37 +129,37 @@ const validationEndpointPlaceholder = computed(() => {
     case "anthropic":
       return "/v1/messages";
     case "gemini":
-      return ""; // Gemini 不显示此字段
+      return ""; // Gemini tidak menampilkan bidang ini
     default:
-      return "请输入验证端点路径";
+      return "Silakan masukkan jalur endpoint validasi";
   }
 });
 
-// 表单验证规则
+// Aturan validasi formulir
 const rules: FormRules = {
   name: [
     {
       required: true,
-      message: "请输入分组名称",
+      message: "Silakan masukkan nama grup",
       trigger: ["blur", "input"],
     },
     {
       pattern: /^[a-z0-9_-]{3,30}$/,
-      message: "只能包含小写字母、数字、中划线或下划线，长度3-30位",
+      message: "Hanya boleh berisi huruf kecil, angka, tanda hubung, atau garis bawah, dengan panjang 3-30 karakter",
       trigger: ["blur", "input"],
     },
   ],
   channel_type: [
     {
       required: true,
-      message: "请选择渠道类型",
+      message: "Silakan pilih jenis saluran",
       trigger: ["blur", "change"],
     },
   ],
   test_model: [
     {
       required: true,
-      message: "请输入测试模型",
+      message: "Silakan masukkan model tes",
       trigger: ["blur", "input"],
     },
   ],
@@ -167,7 +167,7 @@ const rules: FormRules = {
     {
       type: "array",
       min: 1,
-      message: "至少需要一个上游地址",
+      message: "Diperlukan setidaknya satu alamat upstream",
       trigger: ["blur", "change"],
     },
   ],
@@ -332,12 +332,12 @@ function addUpstream() {
   });
 }
 
-// 删除上游地址
+// Hapus alamat upstream
 function removeUpstream(index: number) {
   if (formData.upstreams.length > 1) {
     formData.upstreams.splice(index, 1);
   } else {
-    message.warning("至少需要保留一个上游地址");
+    message.warning("Diperlukan setidaknya satu alamat upstream");
   }
 }
 
@@ -388,13 +388,13 @@ async function handleSubmit() {
 
     loading.value = true;
 
-    // 验证 JSON 格式
+    // Validasi format JSON
     let paramOverrides = {};
     if (formData.param_overrides) {
       try {
         paramOverrides = JSON.parse(formData.param_overrides);
       } catch {
-        message.error("参数覆盖必须是有效的 JSON 格式");
+        message.error("Timpa parameter harus dalam format JSON yang valid");
         return;
       }
     }
@@ -453,7 +453,7 @@ async function handleSubmit() {
   <n-modal :show="show" @update:show="handleClose" class="group-form-modal">
     <n-card
       class="group-form-card"
-      :title="group ? '编辑分组' : '创建分组'"
+      :title="group ? 'Edit Grup' : 'Buat Grup'"
       :bordered="false"
       size="huge"
       role="dialog"
@@ -476,36 +476,36 @@ async function handleSubmit() {
         require-mark-placement="right-hanging"
         class="group-form"
       >
-        <!-- 基础信息 -->
+        <!-- Informasi Dasar -->
         <div class="form-section">
-          <h4 class="section-title">基础信息</h4>
+          <h4 class="section-title">Informasi Dasar</h4>
 
-          <!-- 分组名称和显示名称在同一行 -->
+          <!-- Nama grup dan nama tampilan dalam satu baris -->
           <div class="form-row">
-            <n-form-item label="分组名称" path="name" class="form-item-half">
+            <n-form-item label="Nama Grup" path="name" class="form-item-half">
               <template #label>
                 <div class="form-label-with-tooltip">
-                  分组名称
+                  Nama Grup
                   <n-tooltip trigger="hover" placement="top">
                     <template #trigger>
                       <n-icon :component="HelpCircleOutline" class="help-icon" />
                     </template>
-                    作为API路由的一部分，只能包含小写字母、数字、中划线或下划线，长度3-30位。例如：gemini、openai-2
+                    Sebagai bagian dari rute API, hanya boleh berisi huruf kecil, angka, tanda hubung, atau garis bawah, dengan panjang 3-30 karakter. Contoh: gemini, openai-2
                   </n-tooltip>
                 </div>
               </template>
               <n-input v-model:value="formData.name" placeholder="gemini" />
             </n-form-item>
 
-            <n-form-item label="显示名称" path="display_name" class="form-item-half">
+            <n-form-item label="Nama Tampilan" path="display_name" class="form-item-half">
               <template #label>
                 <div class="form-label-with-tooltip">
-                  显示名称
+                  Nama Tampilan
                   <n-tooltip trigger="hover" placement="top">
                     <template #trigger>
                       <n-icon :component="HelpCircleOutline" class="help-icon" />
                     </template>
-                    用于在界面上显示的友好名称，可以包含中文和特殊字符。如果不填写，将使用分组名称作为显示名称
+                    Nama yang ramah untuk ditampilkan di antarmuka, dapat berisi karakter Cina dan khusus. Jika tidak diisi, nama grup akan digunakan sebagai nama tampilan
                   </n-tooltip>
                 </div>
               </template>
@@ -513,59 +513,59 @@ async function handleSubmit() {
             </n-form-item>
           </div>
 
-          <!-- 渠道类型和排序在同一行 -->
+          <!-- Jenis saluran dan urutan dalam satu baris -->
           <div class="form-row">
-            <n-form-item label="渠道类型" path="channel_type" class="form-item-half">
+            <n-form-item label="Jenis Saluran" path="channel_type" class="form-item-half">
               <template #label>
                 <div class="form-label-with-tooltip">
-                  渠道类型
+                  Jenis Saluran
                   <n-tooltip trigger="hover" placement="top">
                     <template #trigger>
                       <n-icon :component="HelpCircleOutline" class="help-icon" />
                     </template>
-                    选择API提供商类型，决定了请求格式和认证方式。支持OpenAI、Gemini、Anthropic等主流AI服务商
+                    Pilih jenis penyedia API, yang menentukan format permintaan dan metode otentikasi. Mendukung layanan AI utama seperti OpenAI, Gemini, Anthropic, dll.
                   </n-tooltip>
                 </div>
               </template>
               <n-select
                 v-model:value="formData.channel_type"
                 :options="channelTypeOptions"
-                placeholder="请选择渠道类型"
+                placeholder="Silakan pilih jenis saluran"
               />
             </n-form-item>
 
-            <n-form-item label="排序" path="sort" class="form-item-half">
+            <n-form-item label="Urutkan" path="sort" class="form-item-half">
               <template #label>
                 <div class="form-label-with-tooltip">
-                  排序
+                  Urutkan
                   <n-tooltip trigger="hover" placement="top">
                     <template #trigger>
                       <n-icon :component="HelpCircleOutline" class="help-icon" />
                     </template>
-                    决定分组在列表中的显示顺序，数字越小越靠前。建议使用10、20、30这样的间隔数字，便于后续调整
+                    Menentukan urutan tampilan grup dalam daftar, angka yang lebih kecil akan ditampilkan lebih dulu. Disarankan untuk menggunakan angka interval seperti 10, 20, 30 untuk memudahkan penyesuaian di masa mendatang
                   </n-tooltip>
                 </div>
               </template>
               <n-input-number
                 v-model:value="formData.sort"
                 :min="0"
-                placeholder="排序值"
+                placeholder="Nilai urutan"
                 style="width: 100%"
               />
             </n-form-item>
           </div>
 
-          <!-- 测试模型和测试路径在同一行 -->
+          <!-- Model tes dan jalur tes dalam satu baris -->
           <div class="form-row">
-            <n-form-item label="测试模型" path="test_model" class="form-item-half">
+            <n-form-item label="Model Tes" path="test_model" class="form-item-half">
               <template #label>
                 <div class="form-label-with-tooltip">
-                  测试模型
+                  Model Tes
                   <n-tooltip trigger="hover" placement="top">
                     <template #trigger>
                       <n-icon :component="HelpCircleOutline" class="help-icon" />
                     </template>
-                    用于验证API密钥有效性的模型名称。系统会使用这个模型发送测试请求来检查密钥是否可用，请尽量使用轻量快速的模型
+                    Nama model yang digunakan untuk memvalidasi kunci API. Sistem akan menggunakan model ini untuk mengirim permintaan tes untuk memeriksa apakah kunci tersedia, harap gunakan model yang ringan dan cepat
                   </n-tooltip>
                 </div>
               </template>
@@ -577,70 +577,70 @@ async function handleSubmit() {
             </n-form-item>
 
             <n-form-item
-              label="测试路径"
+              label="Jalur Tes"
               path="validation_endpoint"
               class="form-item-half"
               v-if="formData.channel_type !== 'gemini'"
             >
               <template #label>
                 <div class="form-label-with-tooltip">
-                  测试路径
+                  Jalur Tes
                   <n-tooltip trigger="hover" placement="top">
                     <template #trigger>
                       <n-icon :component="HelpCircleOutline" class="help-icon" />
                     </template>
                     <div>
-                      自定义用于验证密钥的API端点路径。如果不填写，将使用默认路径：
+                      Jalur endpoint API kustom untuk memvalidasi kunci. Jika tidak diisi, jalur default akan digunakan:
                       <br />
                       • OpenAI: /v1/chat/completions
                       <br />
                       • Anthropic: /v1/messages
                       <br />
-                      如需使用非标准路径，请在此填写完整的API路径
+                      Jika Anda perlu menggunakan jalur non-standar, silakan isi jalur API lengkap di sini
                     </div>
                   </n-tooltip>
                 </div>
               </template>
               <n-input
                 v-model:value="formData.validation_endpoint"
-                :placeholder="validationEndpointPlaceholder || '可选，自定义用于验证key的API路径'"
+                :placeholder="validationEndpointPlaceholder || 'Opsional, jalur API kustom untuk memvalidasi kunci'"
               />
             </n-form-item>
 
-            <!-- 当gemini渠道时，测试路径不显示，需要一个占位div保持布局 -->
+            <!-- Ketika saluran gemini, jalur tes tidak ditampilkan, diperlukan div placeholder untuk menjaga tata letak -->
             <div v-else class="form-item-half" />
           </div>
 
-          <!-- 代理密钥 -->
-          <n-form-item label="代理密钥" path="proxy_keys">
+          <!-- Kunci Proxy -->
+          <n-form-item label="Kunci Proxy" path="proxy_keys">
             <template #label>
               <div class="form-label-with-tooltip">
-                代理密钥
+                Kunci Proxy
                 <n-tooltip trigger="hover" placement="top">
                   <template #trigger>
                     <n-icon :component="HelpCircleOutline" class="help-icon" />
                   </template>
-                  分组专用代理密钥，用于访问此分组的代理端点。多个密钥请用逗号分隔。
+                  Kunci proxy khusus grup, digunakan untuk mengakses endpoint proxy grup ini. Pisahkan beberapa kunci dengan koma.
                 </n-tooltip>
               </div>
             </template>
             <proxy-keys-input
               v-model="formData.proxy_keys"
-              placeholder="多个密钥请用英文逗号 , 分隔"
+              placeholder="Pisahkan beberapa kunci dengan koma bahasa Inggris , "
               size="medium"
             />
           </n-form-item>
 
-          <!-- 描述独占一行 -->
-          <n-form-item label="描述" path="description">
+          <!-- Deskripsi menempati satu baris -->
+          <n-form-item label="Deskripsi" path="description">
             <template #label>
               <div class="form-label-with-tooltip">
-                描述
+                Deskripsi
                 <n-tooltip trigger="hover" placement="top">
                   <template #trigger>
                     <n-icon :component="HelpCircleOutline" class="help-icon" />
                   </template>
-                  分组的详细说明，帮助团队成员了解该分组的用途和特点。支持多行文本
+                  Deskripsi terperinci grup, membantu anggota tim memahami tujuan dan fitur grup. Mendukung teks multibaris
                 </n-tooltip>
               </div>
             </template>
@@ -655,13 +655,13 @@ async function handleSubmit() {
           </n-form-item>
         </div>
 
-        <!-- 上游地址 -->
+        <!-- Alamat Upstream -->
         <div class="form-section" style="margin-top: 10px">
-          <h4 class="section-title">上游地址</h4>
+          <h4 class="section-title">Alamat Upstream</h4>
           <n-form-item
             v-for="(upstream, index) in formData.upstreams"
             :key="index"
-            :label="`上游 ${index + 1}`"
+            :label="`Upstream ${index + 1}`"
             :path="`upstreams[${index}].url`"
             :rule="{
               required: true,
@@ -671,12 +671,12 @@ async function handleSubmit() {
           >
             <template #label>
               <div class="form-label-with-tooltip">
-                上游 {{ index + 1 }}
+                Upstream {{ index + 1 }}
                 <n-tooltip trigger="hover" placement="top">
                   <template #trigger>
                     <n-icon :component="HelpCircleOutline" class="help-icon" />
                   </template>
-                  API服务器的完整URL地址。多个上游可以实现负载均衡和故障转移，提高服务可用性
+                  Alamat URL lengkap server API. Beberapa upstream dapat mencapai penyeimbangan beban dan failover, meningkatkan ketersediaan layanan
                 </n-tooltip>
               </div>
             </template>
@@ -689,17 +689,17 @@ async function handleSubmit() {
                 />
               </div>
               <div class="upstream-weight">
-                <span class="weight-label">权重</span>
+                <span class="weight-label">Bobot</span>
                 <n-tooltip trigger="hover" placement="top" style="width: 100%">
                   <template #trigger>
                     <n-input-number
                       v-model:value="upstream.weight"
                       :min="1"
-                      placeholder="权重"
+                      placeholder="Bobot"
                       style="width: 100%"
                     />
                   </template>
-                  负载均衡权重，数值越大被选中的概率越高。例如：权重为2的上游被选中的概率是权重为1的两倍
+                  Bobot penyeimbangan beban, semakin besar nilainya, semakin tinggi probabilitas untuk dipilih. Misalnya: probabilitas upstream dengan bobot 2 untuk dipilih adalah dua kali lipat dari upstream dengan bobot 1
                 </n-tooltip>
               </div>
               <div class="upstream-actions">
@@ -724,24 +724,24 @@ async function handleSubmit() {
               <template #icon>
                 <n-icon :component="Add" />
               </template>
-              添加上游地址
+              Tambahkan Alamat Upstream
             </n-button>
           </n-form-item>
         </div>
 
-        <!-- 高级配置 -->
+        <!-- Konfigurasi Lanjutan -->
         <div class="form-section" style="margin-top: 10px">
           <n-collapse>
             <n-collapse-item name="advanced">
-              <template #header>高级配置</template>
+              <template #header>Konfigurasi Lanjutan</template>
               <div class="config-section">
                 <h5 class="config-title-with-tooltip">
-                  分组配置
+                  Konfigurasi Grup
                   <n-tooltip trigger="hover" placement="top">
                     <template #trigger>
                       <n-icon :component="HelpCircleOutline" class="help-icon config-help" />
                     </template>
-                    针对此分组的专用配置参数，如超时时间、重试次数等。这些配置会覆盖全局默认设置
+                    Parameter konfigurasi khusus untuk grup ini, seperti waktu habis, jumlah percobaan ulang, dll. Konfigurasi ini akan menimpa pengaturan default global
                   </n-tooltip>
                 </h5>
 
@@ -750,7 +750,7 @@ async function handleSubmit() {
                     v-for="(configItem, index) in formData.configItems"
                     :key="index"
                     class="config-item-row"
-                    :label="`配置 ${index + 1}`"
+                    :label="`Konfigurasi ${index + 1}`"
                     :path="`configItems[${index}].key`"
                     :rule="{
                       required: true,
@@ -760,12 +760,12 @@ async function handleSubmit() {
                   >
                     <template #label>
                       <div class="form-label-with-tooltip">
-                        配置 {{ index + 1 }}
+                        Konfigurasi {{ index + 1 }}
                         <n-tooltip trigger="hover" placement="top">
                           <template #trigger>
                             <n-icon :component="HelpCircleOutline" class="help-icon" />
                           </template>
-                          选择要配置的参数类型，然后设置对应的数值。不同参数有不同的作用和取值范围
+                          Pilih jenis parameter yang akan dikonfigurasi, lalu atur nilai yang sesuai. Parameter yang berbeda memiliki fungsi dan rentang nilai yang berbeda
                         </n-tooltip>
                       </div>
                     </template>
@@ -783,7 +783,7 @@ async function handleSubmit() {
                                   ?.includes(opt.key) && opt.key !== configItem.key,
                             }))
                           "
-                          placeholder="请选择配置参数"
+                          placeholder="Silakan pilih parameter konfigurasi"
                           @update:value="value => handleConfigKeyChange(index, value)"
                           clearable
                         />
@@ -794,13 +794,13 @@ async function handleSubmit() {
                             <n-input-number
                               v-if="typeof configItem.value === 'number'"
                               v-model:value="configItem.value"
-                              placeholder="参数值"
+                              placeholder="Nilai parameter"
                               :precision="0"
                               style="width: 100%"
                             />
-                            <n-input v-else v-model:value="configItem.value" placeholder="参数值" />
+                            <n-input v-else v-model:value="configItem.value" placeholder="Nilai parameter" />
                           </template>
-                          {{ getConfigOption(configItem.key)?.description || "设置此配置项的值" }}
+                          {{ getConfigOption(configItem.key)?.description || "Atur nilai item konfigurasi ini" }}
                         </n-tooltip>
                       </div>
                       <div class="config-actions">
@@ -830,7 +830,7 @@ async function handleSubmit() {
                     <template #icon>
                       <n-icon :component="Add" />
                     </template>
-                    添加配置参数
+                    Tambahkan Parameter Konfigurasi
                   </n-button>
                 </div>
               </div>
@@ -838,13 +838,13 @@ async function handleSubmit() {
                 <n-form-item path="param_overrides">
                   <template #label>
                     <div class="form-label-with-tooltip">
-                      参数覆盖
+                      Timpa Parameter
                       <n-tooltip trigger="hover" placement="top">
                         <template #trigger>
                           <n-icon :component="HelpCircleOutline" class="help-icon config-help" />
                         </template>
-                        使用JSON格式定义要覆盖的API请求参数。例如： {&quot;temperature&quot;:
-                        0.7}。这些参数会在发送请求时合并到原始参数中
+                        Gunakan format JSON untuk menentukan parameter permintaan API yang akan ditimpa. Contoh: {"temperature":
+                        0.7}. Parameter ini akan digabungkan ke dalam parameter asli saat mengirim permintaan
                       </n-tooltip>
                     </div>
                   </template>
@@ -863,9 +863,9 @@ async function handleSubmit() {
 
       <template #footer>
         <div style="display: flex; justify-content: flex-end; gap: 12px">
-          <n-button @click="handleClose">取消</n-button>
+          <n-button @click="handleClose">Batal</n-button>
           <n-button type="primary" @click="handleSubmit" :loading="loading">
-            {{ group ? "更新" : "创建" }}
+            {{ group ? "Perbarui" : "Buat" }}
           </n-button>
         </div>
       </template>
