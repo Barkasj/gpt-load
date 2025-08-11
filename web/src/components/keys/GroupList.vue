@@ -74,7 +74,7 @@ function handleGroupCreated(group: Group) {
 <template>
   <div class="group-list-container">
     <n-card class="group-list-card modern-card" :bordered="false" size="small">
-      <!-- 搜索框 -->
+      <!-- Kotak Pencarian -->
       <div class="search-section">
         <n-input v-model:value="searchText" placeholder="Cari nama grup..." size="small" clearable>
           <template #prefix>
@@ -83,7 +83,7 @@ function handleGroupCreated(group: Group) {
         </n-input>
       </div>
 
-      <!-- 分组列表 -->
+      <!-- Daftar Grup -->
       <div class="groups-section">
         <n-spin :show="loading" size="small">
           <div v-if="filteredGroups.length === 0 && !loading" class="empty-container">
@@ -117,7 +117,7 @@ function handleGroupCreated(group: Group) {
         </n-spin>
       </div>
 
-      <!-- 添加分组按钮 -->
+      <!-- Tombol Tambah Grup -->
       <div class="add-section">
         <n-button type="primary" size="small" block @click="openCreateGroupModal">
           <template #icon>
