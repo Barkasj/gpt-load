@@ -28,7 +28,7 @@ const toggleMenu = () => {
           <div class="brand-icon">
             <img src="@/assets/logo.png" alt="" />
           </div>
-          <h1 v-if="!isMobile" class="brand-title">GPT Load</h1>
+          <h1 v-if="!isMobile" class="brand-title">BarkahWorkspace</h1>
         </div>
 
         <nav v-if="!isMobile" class="header-nav">
@@ -47,7 +47,7 @@ const toggleMenu = () => {
     </n-layout-header>
 
     <n-drawer v-model:show="isMenuOpen" :width="240" placement="right">
-      <n-drawer-content title="GPT Load" body-content-style="padding: 0;">
+      <n-drawer-content title="BarkahWorkspace" body-content-style="padding: 0;">
         <nav-bar mode="vertical" @close="isMenuOpen = false" />
         <div class="mobile-actions">
           <logout />
