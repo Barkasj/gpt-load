@@ -51,26 +51,26 @@ const totalPages = ref(0);
 const dialog = useDialog();
 const confirmInput = ref("");
 
-// 状态过滤选项
+// Opsi filter status
 const statusOptions = [
-  { label: "全部", value: "all" },
-  { label: "有效", value: "active" },
-  { label: "无效", value: "invalid" },
+  { label: "Semua", value: "all" },
+  { label: "Aktif", value: "active" },
+  { label: "Tidak Valid", value: "invalid" },
 ];
 
-// 更多操作下拉菜单选项
+// Opsi menu dropdown tindakan lainnya
 const moreOptions = [
-  { label: "导出所有密钥", key: "copyAll" },
-  { label: "导出有效密钥", key: "copyValid" },
-  { label: "导出无效密钥", key: "copyInvalid" },
+  { label: "Ekspor Semua Kunci", key: "copyAll" },
+  { label: "Ekspor Kunci Aktif", key: "copyValid" },
+  { label: "Ekspor Kunci Tidak Valid", key: "copyInvalid" },
   { type: "divider" },
-  { label: "恢复所有无效密钥", key: "restoreAll" },
-  { label: "清空所有无效密钥", key: "clearInvalid", props: { style: { color: "#d03050" } } },
-  { label: "清空所有密钥", key: "clearAll", props: { style: { color: "red", fontWeight: "bold" } } },
+  { label: "Pulihkan Semua Kunci Tidak Valid", key: "restoreAll" },
+  { label: "Hapus Semua Kunci Tidak Valid", key: "clearInvalid", props: { style: { color: "#d03050" } } },
+  { label: "Hapus Semua Kunci", key: "clearAll", props: { style: { color: "red", fontWeight: "bold" } } },
   { type: "divider" },
-  { label: "验证所有密钥", key: "validateAll" },
-  { label: "验证有效密钥", key: "validateActive" },
-  { label: "验证无效密钥", key: "validateInvalid" },
+  { label: "Validasi Semua Kunci", key: "validateAll" },
+  { label: "Validasi Kunci Aktif", key: "validateActive" },
+  { label: "Validasi Kunci Tidak Valid", key: "validateInvalid" },
 ];
 
 let testingMsg: MessageReactive | null = null;
@@ -189,7 +189,7 @@ async function loadKeys() {
     total.value = result.pagination.total_items;
     totalPages.value = result.pagination.total_pages;
   } catch (_error) {
-    window.$message.error("加载密钥失败");
+    window.$message.error("Gagal memuat kunci");
   } finally {
     loading.value = false;
   }
@@ -207,9 +207,9 @@ async function handleBatchDeleteSuccess() {
 async function copyKey(key: KeyRow) {
   const success = await copy(key.key_value);
   if (success) {
-    window.$message.success("密钥已复制到剪贴板");
+    window.$message.success("Kunci telah disalin ke clipboard");
   } else {
-    window.$message.error("复制失败");
+    window.$message.error("Gagal menyalin");
   }
 }
 
@@ -218,7 +218,7 @@ async function testKey(_key: KeyRow) {
     return;
   }
 
-  testingMsg = window.$message.info("正在测试密钥...", {
+  testingMsg = window.$message.info("Sedang menguji kunci...", {
     duration: 0,
   });
 
@@ -226,9 +226,9 @@ async function testKey(_key: KeyRow) {
     const response = await keysApi.testKeys(props.selectedGroup.id, _key.key_value);
     const curValid = response.results?.[0] || {};
     if (curValid.is_valid) {
-      window.$message.success(`密钥测试成功 (耗时: ${formatDuration(response.total_duration)})`);
+      window.$message.success(`Uji kunci berhasil (Waktu: ${formatDuration(response.total_duration)})`);
     } else {
-      window.$message.error(curValid.error || "密钥测试失败: 无效的API密钥", {
+      window.$message.error(curValid.error || "Uji kunci gagal: Kunci API tidak valid", {
         keepAliveOnHover: true,
         duration: 5000,
         closable: true,
@@ -238,7 +238,7 @@ async function testKey(_key: KeyRow) {
     // 触发同步操作刷新
     triggerSyncOperationRefresh(props.selectedGroup.name, "TEST_SINGLE");
   } catch (_error) {
-    console.error("测试失败");
+    console.error("Uji gagal");
   } finally {
     testingMsg?.destroy();
     testingMsg = null;
@@ -278,10 +278,10 @@ async function restoreKey(key: KeyRow) {
   }
 
   const d = dialog.warning({
-    title: "恢复密钥",
-    content: `确定要恢复密钥"${maskKey(key.key_value)}"吗？`,
-    positiveText: "确定",
-    negativeText: "取消",
+    title: "Pulihkan Kunci",
+    content: `Apakah Anda yakin ingin memulihkan kunci "${maskKey(key.key_value)}"?`,
+    positiveText: "Konfirmasi",
+    negativeText: "Batal",
     onPositiveClick: async () => {
       if (!props.selectedGroup?.id) {
         return;
@@ -296,7 +296,7 @@ async function restoreKey(key: KeyRow) {
         // 触发同步操作刷新
         triggerSyncOperationRefresh(props.selectedGroup.name, "RESTORE_SINGLE");
       } catch (_error) {
-        console.error("恢复失败");
+        console.error("Gagal memulihkan");
       } finally {
         d.loading = false;
         isRestoring.value = false;
@@ -311,10 +311,10 @@ async function deleteKey(key: KeyRow) {
   }
 
   const d = dialog.warning({
-    title: "删除密钥",
-    content: `确定要删除密钥"${maskKey(key.key_value)}"吗？`,
-    positiveText: "确定",
-    negativeText: "取消",
+    title: "Hapus Kunci",
+    content: `Apakah Anda yakin ingin menghapus kunci "${maskKey(key.key_value)}"?`,
+    positiveText: "Konfirmasi",
+    negativeText: "Batal",
     onPositiveClick: async () => {
       if (!props.selectedGroup?.id) {
         return;
@@ -329,7 +329,7 @@ async function deleteKey(key: KeyRow) {
         // 触发同步操作刷新
         triggerSyncOperationRefresh(props.selectedGroup.name, "DELETE_SINGLE");
       } catch (_error) {
-        console.error("删除失败");
+        console.error("Gagal menghapus");
       } finally {
         d.loading = false;
         isDeling.value = false;
@@ -340,7 +340,7 @@ async function deleteKey(key: KeyRow) {
 
 function formatRelativeTime(date: string) {
   if (!date) {
-    return "从未";
+    return "Tidak pernah";
   }
   const now = new Date();
   const target = new Date(date);
@@ -350,18 +350,18 @@ function formatRelativeTime(date: string) {
   const diffDays = Math.floor(diffHours / 24);
 
   if (diffDays > 0) {
-    return `${diffDays}天前`;
+    return `${diffDays} hari yang lalu`;
   }
   if (diffHours > 0) {
-    return `${diffHours}小时前`;
+    return `${diffHours} jam yang lalu`;
   }
   if (diffMinutes > 0) {
-    return `${diffMinutes}分钟前`;
+    return `${diffMinutes} menit yang lalu`;
   }
   if (diffSeconds > 0) {
-    return `${diffSeconds}秒前`;
+    return `${diffSeconds} detik yang lalu`;
   }
-  return "刚刚";
+  return "Baru saja";
 }
 
 function getStatusClass(status: KeyStatus): string {
@@ -405,10 +405,10 @@ async function restoreAllInvalid() {
   }
 
   const d = dialog.warning({
-    title: "恢复密钥",
-    content: "确定要恢复所有无效密钥吗？",
-    positiveText: "确定",
-    negativeText: "取消",
+    title: "Pulihkan Kunci",
+    content: "Apakah Anda yakin ingin memulihkan semua kunci yang tidak valid?",
+    positiveText: "Konfirmasi",
+    negativeText: "Batal",
     onPositiveClick: async () => {
       if (!props.selectedGroup?.id) {
         return;
@@ -422,7 +422,7 @@ async function restoreAllInvalid() {
         // 触发同步操作刷新
         triggerSyncOperationRefresh(props.selectedGroup.name, "RESTORE_ALL_INVALID");
       } catch (_error) {
-        console.error("恢复失败");
+        console.error("Gagal memulihkan");
       } finally {
         d.loading = false;
         isRestoring.value = false;
@@ -436,14 +436,14 @@ async function validateKeys(status: "all" | "active" | "invalid") {
     return;
   }
 
-  let statusText = "所有";
+  let statusText = "semua";
   if (status === "active") {
-    statusText = "有效";
+    statusText = "aktif";
   } else if (status === "invalid") {
-    statusText = "无效";
+    statusText = "tidak valid";
   }
 
-  testingMsg = window.$message.info(`正在验证${statusText}密钥...`, {
+  testingMsg = window.$message.info(`Sedang memvalidasi kunci ${statusText}...`, {
     duration: 0,
   });
 
@@ -452,7 +452,7 @@ async function validateKeys(status: "all" | "active" | "invalid") {
     localStorage.removeItem("last_closed_task");
     appState.taskPollingTrigger++;
   } catch (_error) {
-    console.error("测试失败");
+    console.error("Uji gagal");
   } finally {
     testingMsg?.destroy();
     testingMsg = null;
@@ -465,10 +465,10 @@ async function clearAllInvalid() {
   }
 
   const d = dialog.warning({
-    title: "清除密钥",
-    content: "确定要清除所有无效密钥吗？此操作不可恢复！",
-    positiveText: "确定",
-    negativeText: "取消",
+    title: "Hapus Kunci",
+    content: "Apakah Anda yakin ingin menghapus semua kunci yang tidak valid? Tindakan ini tidak dapat dibatalkan!",
+    positiveText: "Konfirmasi",
+    negativeText: "Batal",
     onPositiveClick: async () => {
       if (!props.selectedGroup?.id) {
         return;
@@ -478,12 +478,12 @@ async function clearAllInvalid() {
       d.loading = true;
       try {
         const { data } = await keysApi.clearAllInvalidKeys(props.selectedGroup.id);
-        window.$message.success(data?.message || "清除成功");
+        window.$message.success(data?.message || "Berhasil dihapus");
         await loadKeys();
         // 触发同步操作刷新
         triggerSyncOperationRefresh(props.selectedGroup.name, "CLEAR_ALL_INVALID");
       } catch (_error) {
-        console.error("删除失败");
+        console.error("Gagal menghapus");
       } finally {
         d.loading = false;
         isDeling.value = false;
@@ -498,40 +498,40 @@ async function clearAll() {
   }
 
   dialog.warning({
-    title: "清空所有密钥",
-    content: "此操作将永久删除该分组下的所有密钥，且不可恢复！确定要继续吗？",
-    positiveText: "确定",
-    negativeText: "取消",
+    title: "Hapus Semua Kunci",
+    content: "Tindakan ini akan menghapus semua kunci di bawah grup ini secara permanen dan tidak dapat dipulihkan! Apakah Anda yakin ingin melanjutkan?",
+    positiveText: "Konfirmasi",
+    negativeText: "Batal",
     onPositiveClick: () => {
       confirmInput.value = ""; // Reset before opening second dialog
       dialog.create({
-        title: "请输入分组名称以确认",
+        title: "Silakan masukkan nama grup untuk mengonfirmasi",
         content: () =>
           h("div", null, [
             h("p", null, [
-              "这是一个非常危险的操作，将删除此分组下的",
-              h("strong", null, "所有"),
-              "密钥。为防止误操作，请输入分组名称 ",
+              "Ini adalah operasi yang sangat berbahaya, akan menghapus ",
+              h("strong", null, "semua"),
+              " kunci di bawah grup ini. Untuk mencegah kesalahan operasi, silakan masukkan nama grup ",
               h(
                 "strong",
                 { style: { color: "#d03050" } },
                 props.selectedGroup!.name
               ),
-              " 以确认。",
+              " untuk mengonfirmasi.",
             ]),
             h(NInput, {
               value: confirmInput.value,
               "onUpdate:value": (v) => {
                 confirmInput.value = v;
               },
-              placeholder: "请输入分组名称",
+              placeholder: "Silakan masukkan nama grup",
             }),
           ]),
-        positiveText: "确认清空",
-        negativeText: "取消",
+        positiveText: "Konfirmasi Hapus",
+        negativeText: "Batal",
         onPositiveClick: async () => {
           if (confirmInput.value !== props.selectedGroup!.name) {
-            window.$message.error("分组名称输入不正确");
+            window.$message.error("Nama grup yang dimasukkan salah");
             return false; // Prevent dialog from closing
           }
 
@@ -542,12 +542,12 @@ async function clearAll() {
           isDeling.value = true;
           try {
             await keysApi.clearAllKeys(props.selectedGroup.id);
-            window.$message.success("已成功清空所有密钥");
+            window.$message.success("Berhasil menghapus semua kunci");
             await loadKeys();
             // Trigger sync operation refresh
             triggerSyncOperationRefresh(props.selectedGroup.name, "CLEAR_ALL");
           } catch (_error) {
-            console.error("清空失败", _error);
+            console.error("Gagal menghapus", _error);
           } finally {
             isDeling.value = false;
           }
@@ -575,20 +575,20 @@ function resetPage() {
 
 <template>
   <div class="key-table-container">
-    <!-- 工具栏 -->
+    <!-- Toolbar -->
     <div class="toolbar">
       <div class="toolbar-left">
         <n-button type="success" size="small" @click="createDialogShow = true">
           <template #icon>
             <n-icon :component="AddCircleOutline" />
           </template>
-          添加密钥
+          Tambah Kunci
         </n-button>
         <n-button type="error" size="small" @click="deleteDialogShow = true">
           <template #icon>
             <n-icon :component="RemoveCircleOutline" />
           </template>
-          删除密钥
+          Hapus Kunci
         </n-button>
       </div>
       <div class="toolbar-right">
@@ -602,7 +602,7 @@ function resetPage() {
           <n-input-group>
             <n-input
               v-model:value="searchText"
-              placeholder="Key 模糊查询"
+              placeholder="Pencarian fuzzy kunci"
               size="small"
               style="width: 180px"
               clearable
@@ -623,11 +623,11 @@ function resetPage() {
       </div>
     </div>
 
-    <!-- 密钥卡片网格 -->
+    <!-- Grid Kartu Kunci -->
     <div class="keys-grid-container">
       <n-spin :show="loading">
         <div v-if="keys.length === 0 && !loading" class="empty-container">
-          <n-empty description="没有找到匹配的密钥" />
+          <n-empty description="Tidak ada kunci yang cocok ditemukan" />
         </div>
         <div v-else class="keys-grid">
           <div
@@ -636,20 +636,20 @@ function resetPage() {
             class="key-card"
             :class="getStatusClass(key.status)"
           >
-            <!-- 主要信息行：Key + 快速操作 -->
+            <!-- Baris informasi utama: Kunci + tindakan cepat -->
             <div class="key-main">
               <div class="key-section">
                 <n-tag v-if="key.status === 'active'" type="success" :bordered="false" round>
                   <template #icon>
                     <n-icon :component="CheckmarkCircle" />
                   </template>
-                  有效
+                  Aktif
                 </n-tag>
                 <n-tag v-else :bordered="false" round>
                   <template #icon>
                     <n-icon :component="AlertCircleOutline" />
                   </template>
-                  无效
+                  Tidak Valid
                 </n-tag>
                 <n-input
                   class="key-text"
@@ -658,12 +658,12 @@ function resetPage() {
                   size="small"
                 />
                 <div class="quick-actions">
-                  <n-button size="tiny" text @click="toggleKeyVisibility(key)" title="显示/隐藏">
+                  <n-button size="tiny" text @click="toggleKeyVisibility(key)" title="Tampilkan/Sembunyikan">
                     <template #icon>
                       <n-icon :component="key.is_visible ? EyeOffOutline : EyeOutline" />
                     </template>
                   </n-button>
-                  <n-button size="tiny" text @click="copyKey(key)" title="复制">
+                  <n-button size="tiny" text @click="copyKey(key)" title="Salin">
                     <template #icon>
                       <n-icon :component="CopyOutline" />
                     </template>
@@ -672,19 +672,19 @@ function resetPage() {
               </div>
             </div>
 
-            <!-- 统计信息 + 操作按钮行 -->
+            <!-- Baris statistik + tombol tindakan -->
             <div class="key-bottom">
               <div class="key-stats">
                 <span class="stat-item">
-                  请求
+                  Permintaan
                   <strong>{{ key.request_count }}</strong>
                 </span>
                 <span class="stat-item">
-                  失败
+                  Gagal
                   <strong>{{ key.failure_count }}</strong>
                 </span>
                 <span class="stat-item">
-                  {{ key.last_used_at ? formatRelativeTime(key.last_used_at) : "未使用" }}
+                  {{ key.last_used_at ? formatRelativeTime(key.last_used_at) : "Tidak digunakan" }}
                 </span>
               </div>
               <n-button-group class="key-actions">
@@ -694,19 +694,19 @@ function resetPage() {
                   type="info"
                   size="tiny"
                   @click="testKey(key)"
-                  title="测试密钥"
+                  title="Uji Kunci"
                 >
-                  测试
+                  Uji
                 </n-button>
                 <n-button
                   v-if="key.status !== 'active'"
                   tertiary
                   size="tiny"
                   @click="restoreKey(key)"
-                  title="恢复密钥"
+                  title="Pulihkan Kunci"
                   type="warning"
                 >
-                  恢复
+                  Pulihkan
                 </n-button>
                 <n-button
                   round
@@ -714,9 +714,9 @@ function resetPage() {
                   size="tiny"
                   type="error"
                   @click="deleteKey(key)"
-                  title="删除密钥"
+                  title="Hapus Kunci"
                 >
-                  删除
+                  Hapus
                 </n-button>
               </n-button-group>
             </div>
@@ -725,17 +725,17 @@ function resetPage() {
       </n-spin>
     </div>
 
-    <!-- 分页 -->
+    <!-- Paginasi -->
     <div class="pagination-container">
       <div class="pagination-info">
-        <span>共 {{ total }} 条记录</span>
+        <span>Total {{ total }} catatan</span>
         <n-select
           v-model:value="pageSize"
           :options="[
-            { label: '12条/页', value: 12 },
-            { label: '24条/页', value: 24 },
-            { label: '60条/页', value: 60 },
-            { label: '120条/页', value: 120 },
+            { label: '12/halaman', value: 12 },
+            { label: '24/halaman', value: 24 },
+            { label: '60/halaman', value: 60 },
+            { label: '120/halaman', value: 120 },
           ]"
           size="small"
           style="width: 100px; margin-left: 12px"
@@ -744,15 +744,15 @@ function resetPage() {
       </div>
       <div class="pagination-controls">
         <n-button size="small" :disabled="currentPage <= 1" @click="changePage(currentPage - 1)">
-          上一页
+          Sebelumnya
         </n-button>
-        <span class="page-info">第 {{ currentPage }} 页，共 {{ totalPages }} 页</span>
+        <span class="page-info">Halaman {{ currentPage }}, Total {{ totalPages }}</span>
         <n-button
           size="small"
           :disabled="currentPage >= totalPages"
           @click="changePage(currentPage + 1)"
         >
-          下一页
+          Berikutnya
         </n-button>
       </div>
     </div>
