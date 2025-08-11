@@ -211,7 +211,7 @@ const formatNumber = (value: number) => {
 };
 
 const isErrorDataset = (label: string) => {
-  return label.includes("失败");
+  return label.includes("Gagal");
 };
 
 // 动画相关
@@ -326,14 +326,14 @@ const fetchGroups = async () => {
   try {
     const response = await getGroupList();
     groupOptions.value = [
-      { label: "全部分组", value: null },
+      { label: "Semua Grup", value: null },
       ...response.data.map(group => ({
         label: getGroupDisplayName(group),
         value: group.id || 0,
       })),
     ];
   } catch (error) {
-    console.error("获取分组列表失败:", error);
+    console.error("Gagal mendapatkan daftar grup:", error);
   }
 };
 
@@ -349,7 +349,7 @@ const fetchChartData = async () => {
       startAnimation();
     }, 100);
   } catch (error) {
-    console.error("获取图表数据失败:", error);
+    console.error("Gagal mendapatkan data bagan:", error);
   } finally {
     loading.value = false;
   }
@@ -370,12 +370,12 @@ onMounted(() => {
   <div class="chart-container">
     <div class="chart-header">
       <div class="chart-title-section">
-        <h3 class="chart-title">24小时请求趋势</h3>
+        <h3 class="chart-title">Tren Permintaan 24 Jam</h3>
       </div>
       <n-select
         v-model:value="selectedGroup"
         :options="groupOptions as any"
-        placeholder="全部分组"
+        placeholder="Semua Grup"
         size="small"
         style="width: 150px"
         clearable
@@ -555,7 +555,7 @@ onMounted(() => {
 
     <div v-else class="chart-loading">
       <n-spin size="large" />
-      <p>加载中...</p>
+      <p>Memuat...</p>
     </div>
   </div>
 </template>
