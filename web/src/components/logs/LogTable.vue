@@ -43,9 +43,9 @@ const filters = reactive({
 });
 
 const successOptions = [
-  { label: "状态", value: "" },
-  { label: "成功", value: "true" },
-  { label: "失败", value: "false" },
+  { label: "Status", value: "" },
+  { label: "Berhasil", value: "true" },
+  { label: "Gagal", value: "false" },
 ];
 
 // Fetch data
@@ -73,14 +73,14 @@ const loadLogs = async () => {
     } else {
       logs.value = [];
       total.value = 0;
-      window.$message.error(res.message || "加载日志失败", {
+      window.$message.error(res.message || "Gagal memuat log", {
         keepAliveOnHover: true,
         duration: 5000,
         closable: true,
       });
     }
   } catch (_error) {
-    window.$message.error("加载日志请求失败");
+    window.$message.error("Gagal memuat permintaan log");
   } finally {
     loading.value = false;
   }
@@ -101,40 +101,40 @@ const toggleKeyVisibility = (row: LogRow) => {
 // Columns definition
 const createColumns = () => [
   {
-    title: "时间",
+    title: "Waktu",
     key: "timestamp",
     width: 160,
     render: (row: LogRow) => formatDateTime(row.timestamp),
   },
   {
-    title: "状态",
+    title: "Status",
     key: "is_success",
     width: 50,
     render: (row: LogRow) =>
       h(
         NTag,
         { type: row.is_success ? "success" : "error", size: "small", round: true },
-        { default: () => (row.is_success ? "成功" : "失败") }
+        { default: () => (row.is_success ? "Berhasil" : "Gagal") }
       ),
   },
   {
-    title: "类型",
+    title: "Jenis",
     key: "is_stream",
     width: 50,
     render: (row: LogRow) =>
       h(
         NTag,
         { type: row.is_stream ? "info" : "default", size: "small", round: true },
-        { default: () => (row.is_stream ? "流式" : "非流") }
+        { default: () => (row.is_stream ? "Streaming" : "Non-Streaming") }
       ),
   },
-  { title: "状态码", key: "status_code", width: 60 },
-  { title: "耗时(ms)", key: "duration_ms", width: 80 },
-  { title: "重试", key: "retries", width: 50 },
-  { title: "分组", key: "group_name", width: 120 },
-  { title: "模型", key: "model", width: 300 },
+  { title: "Kode Status", key: "status_code", width: 60 },
+  { title: "Durasi (ms)", key: "duration_ms", width: 80 },
+  { title: "Coba Lagi", key: "retries", width: 50 },
+  { title: "Grup", key: "group_name", width: 120 },
+  { title: "Model", key: "model", width: 300 },
   {
-    title: "Key",
+    title: "Kunci",
     key: "key_value",
     width: 200,
     render: (row: LogRow) =>
@@ -155,22 +155,22 @@ const createColumns = () => [
       ]),
   },
   {
-    title: "请求路径",
+    title: "Jalur Permintaan",
     key: "request_path",
     width: 220,
     render: (row: LogRow) =>
       h(NEllipsis, { style: "max-width: 200px" }, { default: () => row.request_path }),
   },
   {
-    title: "上游地址",
+    title: "Alamat Hulu",
     key: "upstream_addr",
     width: 220,
     render: (row: LogRow) =>
       h(NEllipsis, { style: "max-width: 200px" }, { default: () => row.upstream_addr }),
   },
-  { title: "源IP", key: "source_ip", width: 140 },
+  { title: "IP Sumber", key: "source_ip", width: 140 },
   {
-    title: "错误信息",
+    title: "Pesan Kesalahan",
     width: 270,
     key: "error_message",
     render: (row: LogRow) =>
@@ -253,7 +253,7 @@ function changePageSize(size: number) {
               <div class="filter-item">
                 <n-input
                   v-model:value="filters.status_code"
-                  placeholder="状态码"
+                  placeholder="Kode Status"
                   size="small"
                   clearable
                   @keyup.enter="handleSearch"
@@ -262,7 +262,7 @@ function changePageSize(size: number) {
               <div class="filter-item">
                 <n-input
                   v-model:value="filters.group_name"
-                  placeholder="分组名"
+                  placeholder="Nama Grup"
                   size="small"
                   clearable
                   @keyup.enter="handleSearch"
@@ -271,7 +271,7 @@ function changePageSize(size: number) {
               <div class="filter-item">
                 <n-input
                   v-model:value="filters.model"
-                  placeholder="模型"
+                  placeholder="Model"
                   size="small"
                   clearable
                   @keyup.enter="handleSearch"
@@ -280,7 +280,7 @@ function changePageSize(size: number) {
               <div class="filter-item">
                 <n-input
                   v-model:value="filters.key_value"
-                  placeholder="密钥"
+                  placeholder="Kunci"
                   size="small"
                   clearable
                   @keyup.enter="handleSearch"
@@ -292,7 +292,7 @@ function changePageSize(size: number) {
                   type="datetime"
                   clearable
                   size="small"
-                  placeholder="开始时间"
+                  placeholder="Waktu Mulai"
                 />
               </div>
               <div class="filter-item">
@@ -301,13 +301,13 @@ function changePageSize(size: number) {
                   type="datetime"
                   clearable
                   size="small"
-                  placeholder="结束时间"
+                  placeholder="Waktu Selesai"
                 />
               </div>
               <div class="filter-item">
                 <n-input
                   v-model:value="filters.error_contains"
-                  placeholder="错误信息"
+                  placeholder="Pesan Kesalahan"
                   size="small"
                   clearable
                   @keyup.enter="handleSearch"
@@ -318,14 +318,14 @@ function changePageSize(size: number) {
                   <template #icon>
                     <n-icon :component="Search" />
                   </template>
-                  搜索
+                  Cari
                 </n-button>
-                <n-button size="small" @click="resetFilters">重置</n-button>
+                <n-button size="small" @click="resetFilters">Setel Ulang</n-button>
                 <n-button size="small" type="primary" ghost @click="exportLogs">
                   <template #icon>
                     <n-icon :component="DownloadOutline" />
                   </template>
-                  导出密钥
+                  Ekspor Kunci
                 </n-button>
               </div>
             </div>
@@ -350,14 +350,14 @@ function changePageSize(size: number) {
         <!-- 分页 -->
         <div class="pagination-container">
           <div class="pagination-info">
-            <span>共 {{ total }} 条记录</span>
+            <span>Total {{ total }} catatan</span>
             <n-select
               v-model:value="pageSize"
               :options="[
-                { label: '15条/页', value: 15 },
-                { label: '30条/页', value: 30 },
-                { label: '50条/页', value: 50 },
-                { label: '100条/页', value: 100 },
+                { label: '15/halaman', value: 15 },
+                { label: '30/halaman', value: 30 },
+                { label: '50/halaman', value: 50 },
+                { label: '100/halaman', value: 100 },
               ]"
               size="small"
               style="width: 100px; margin-left: 12px"
@@ -370,15 +370,15 @@ function changePageSize(size: number) {
               :disabled="currentPage <= 1"
               @click="changePage(currentPage - 1)"
             >
-              上一页
+              Sebelumnya
             </n-button>
-            <span class="page-info">第 {{ currentPage }} 页，共 {{ totalPages }} 页</span>
+            <span class="page-info">Halaman {{ currentPage }} dari {{ totalPages }}</span>
             <n-button
               size="small"
               :disabled="currentPage >= totalPages"
               @click="changePage(currentPage + 1)"
             >
-              下一页
+              Berikutnya
             </n-button>
           </div>
         </div>
