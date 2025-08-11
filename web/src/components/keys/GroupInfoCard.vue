@@ -65,9 +65,9 @@ async function copyProxyKeys() {
   const keysToCopy = props.group.proxy_keys.replace(/,/g, "\n");
   const success = await copy(keysToCopy);
   if (success) {
-    window.$message.success("代理密钥已复制到剪贴板");
+    window.$message.success("Kunci proxy telah disalin ke clipboard");
   } else {
-    window.$message.error("复制失败");
+    window.$message.error("Gagal menyalin");
   }
 }
 
@@ -154,7 +154,7 @@ function getConfigDisplayName(key: string): string {
 
 function getConfigDescription(key: string): string {
   const option = configOptions.value.find(opt => opt.key === key);
-  return option?.description || "暂无说明";
+  return option?.description || "Tidak ada deskripsi";
 }
 
 function handleEdit() {
@@ -174,36 +174,36 @@ async function handleDelete() {
   }
 
   dialog.warning({
-    title: "删除分组",
-    content: `确定要删除分组 "${getGroupDisplayName(
+    title: "Hapus Grup",
+    content: `Apakah Anda yakin ingin menghapus grup "${getGroupDisplayName(
       props.group
-    )}" 吗？此操作将删除分组及其下所有密钥，且不可恢复。`,
-    positiveText: "确定",
-    negativeText: "取消",
+    )}"? Tindakan ini akan menghapus grup dan semua kunci di bawahnya, dan tidak dapat dipulihkan.`,
+    positiveText: "Konfirmasi",
+    negativeText: "Batal",
     onPositiveClick: () => {
       confirmInput.value = ""; // Reset before opening second dialog
       dialog.create({
-        title: "请输入分组名称以确认删除",
+        title: "Silakan masukkan nama grup untuk mengonfirmasi penghapusan",
         content: () =>
           h("div", null, [
             h("p", null, [
-              "这是一个非常危险的操作。为防止误操作，请输入分组名称 ",
+              "Ini adalah operasi yang sangat berbahaya. Untuk mencegah kesalahan operasi, silakan masukkan nama grup ",
               h("strong", { style: { color: "#d03050" } }, props.group!.name),
-              " 以确认删除。",
+              " untuk mengonfirmasi penghapusan.",
             ]),
             h(NInput, {
               value: confirmInput.value,
               "onUpdate:value": (v) => {
                 confirmInput.value = v;
               },
-              placeholder: "请输入分组名称",
+              placeholder: "Silakan masukkan nama grup",
             }),
           ]),
-        positiveText: "确认删除",
-        negativeText: "取消",
+        positiveText: "Konfirmasi Penghapusan",
+        negativeText: "Batal",
         onPositiveClick: async () => {
           if (confirmInput.value !== props.group!.name) {
-            window.$message.error("分组名称输入不正确");
+            window.$message.error("Nama grup yang dimasukkan salah");
             return false; // Prevent dialog from closing
           }
 
@@ -212,11 +212,11 @@ async function handleDelete() {
             if (props.group?.id) {
               await keysApi.deleteGroup(props.group.id);
               emit("delete", props.group);
-              window.$message.success("分组已成功删除");
+              window.$message.success("Grup berhasil dihapus");
             }
           } catch (error) {
-            console.error("删除分组失败:", error);
-            window.$message.error("删除分组失败，请稍后重试");
+            console.error("Gagal menghapus grup:", error);
+            window.$message.error("Gagal menghapus grup, silakan coba lagi nanti");
           } finally {
             delLoading.value = false;
           }
@@ -249,9 +249,9 @@ async function copyUrl(url: string) {
   }
   const success = await copy(url);
   if (success) {
-    window.$message.success("地址已复制到剪贴板");
+    window.$message.success("Alamat telah disalin ke clipboard");
   } else {
-    window.$message.error("复制失败");
+    window.$message.error("Gagal menyalin");
   }
 }
 
@@ -268,19 +268,19 @@ function resetPage() {
         <div class="card-header">
           <div class="header-left">
             <h3 class="group-title">
-              {{ group ? getGroupDisplayName(group) : "请选择分组" }}
+              {{ group ? getGroupDisplayName(group) : "Silakan pilih grup" }}
               <n-tooltip trigger="hover" v-if="group">
                 <template #trigger>
                   <code class="group-url" @click="copyUrl(group?.endpoint || '')">
                     {{ group.endpoint }}
                   </code>
                 </template>
-                点击复制
+                Klik untuk menyalin
               </n-tooltip>
             </h3>
           </div>
           <div class="header-actions">
-            <n-button quaternary circle size="small" @click="handleEdit" title="编辑分组">
+            <n-button quaternary circle size="small" @click="handleEdit" title="Edit Grup">
               <template #icon>
                 <n-icon :component="Pencil" />
               </template>
@@ -290,7 +290,7 @@ function resetPage() {
               circle
               size="small"
               @click="handleDelete"
-              title="删除分组"
+              title="Hapus Grup"
               type="error"
               :disabled="!group"
             >
@@ -308,14 +308,14 @@ function resetPage() {
         <n-spin :show="loading" size="small">
           <n-grid cols="2 s:4" :x-gap="12" :y-gap="12" responsive="screen">
             <n-grid-item span="1">
-              <n-statistic :label="`密钥数量：${stats?.key_stats?.total_keys ?? 0}`">
+              <n-statistic :label="`Jumlah Kunci：${stats?.key_stats?.total_keys ?? 0}`">
                 <n-tooltip trigger="hover">
                   <template #trigger>
                     <n-gradient-text type="success" size="20">
                       {{ stats?.key_stats?.active_keys ?? 0 }}
                     </n-gradient-text>
                   </template>
-                  有效密钥数
+                  Jumlah Kunci Aktif
                 </n-tooltip>
                 <n-divider vertical />
                 <n-tooltip trigger="hover">
@@ -324,13 +324,13 @@ function resetPage() {
                       {{ stats?.key_stats?.invalid_keys ?? 0 }}
                     </n-gradient-text>
                   </template>
-                  无效密钥数
+                  Jumlah Kunci Tidak Valid
                 </n-tooltip>
               </n-statistic>
             </n-grid-item>
             <n-grid-item span="1">
               <n-statistic
-                :label="`1小时请求：${formatNumber(stats?.hourly_stats?.total_requests ?? 0)}`"
+                :label="`Permintaan 1 Jam：${formatNumber(stats?.hourly_stats?.total_requests ?? 0)}`"
               >
                 <n-tooltip trigger="hover">
                   <template #trigger>
@@ -338,7 +338,7 @@ function resetPage() {
                       {{ formatNumber(stats?.hourly_stats?.failed_requests ?? 0) }}
                     </n-gradient-text>
                   </template>
-                  近1小时失败请求
+                  Permintaan Gagal dalam 1 Jam Terakhir
                 </n-tooltip>
                 <n-divider vertical />
                 <n-tooltip trigger="hover">
@@ -347,13 +347,13 @@ function resetPage() {
                       {{ formatPercentage(stats?.hourly_stats?.failure_rate ?? 0) }}
                     </n-gradient-text>
                   </template>
-                  近1小时失败率
+                  Tingkat Kegagalan dalam 1 Jam Terakhir
                 </n-tooltip>
               </n-statistic>
             </n-grid-item>
             <n-grid-item span="1">
               <n-statistic
-                :label="`24小时请求：${formatNumber(stats?.daily_stats?.total_requests ?? 0)}`"
+                :label="`Permintaan 24 Jam：${formatNumber(stats?.daily_stats?.total_requests ?? 0)}`"
               >
                 <n-tooltip trigger="hover">
                   <template #trigger>
@@ -361,7 +361,7 @@ function resetPage() {
                       {{ formatNumber(stats?.daily_stats?.failed_requests ?? 0) }}
                     </n-gradient-text>
                   </template>
-                  近24小时失败请求
+                  Permintaan Gagal dalam 24 Jam Terakhir
                 </n-tooltip>
                 <n-divider vertical />
                 <n-tooltip trigger="hover">
@@ -370,13 +370,15 @@ function resetPage() {
                       {{ formatPercentage(stats?.daily_stats?.failure_rate ?? 0) }}
                     </n-gradient-text>
                   </template>
-                  近24小时失败率
+                  Tingkat Kegagalan dalam 24 Jam Terakhir
                 </n-tooltip>
               </n-statistic>
             </n-grid-item>
             <n-grid-item span="1">
               <n-statistic
-                :label="`近7天请求：${formatNumber(stats?.weekly_stats?.total_requests ?? 0)}`"
+                :label="`Permintaan 7 Hari Terakhir：${formatNumber(
+                  stats?.weekly_stats?.total_requests ?? 0
+                )}`"
               >
                 <n-tooltip trigger="hover">
                   <template #trigger>
@@ -384,7 +386,7 @@ function resetPage() {
                       {{ formatNumber(stats?.weekly_stats?.failed_requests ?? 0) }}
                     </n-gradient-text>
                   </template>
-                  近7天失败请求
+                  Permintaan Gagal dalam 7 Hari Terakhir
                 </n-tooltip>
                 <n-divider vertical />
                 <n-tooltip trigger="hover">
@@ -393,7 +395,7 @@ function resetPage() {
                       {{ formatPercentage(stats?.weekly_stats?.failure_rate ?? 0) }}
                     </n-gradient-text>
                   </template>
-                  近7天失败率
+                  Tingkat Kegagalan dalam 7 Hari Terakhir
                 </n-tooltip>
               </n-statistic>
             </n-grid-item>
@@ -405,44 +407,44 @@ function resetPage() {
       <!-- 详细信息区（可折叠） -->
       <div class="details-section">
         <n-collapse accordion v-model:expanded-names="expandedName">
-          <n-collapse-item title="详细信息" name="details">
+          <n-collapse-item title="Informasi Rinci" name="details">
             <div class="details-content">
               <div class="detail-section">
-                <h4 class="section-title">基础信息</h4>
+                <h4 class="section-title">Informasi Dasar</h4>
                 <n-form label-placement="left" label-width="85px" label-align="right">
                   <n-grid cols="1 m:2">
                     <n-grid-item>
-                      <n-form-item label="分组名称：">
+                      <n-form-item label="Nama Grup:">
                         {{ group?.name }}
                       </n-form-item>
                     </n-grid-item>
                     <n-grid-item>
-                      <n-form-item label="显示名称：">
+                      <n-form-item label="Nama Tampilan:">
                         {{ group?.display_name }}
                       </n-form-item>
                     </n-grid-item>
                     <n-grid-item>
-                      <n-form-item label="渠道类型：">
+                      <n-form-item label="Jenis Saluran:">
                         {{ group?.channel_type }}
                       </n-form-item>
                     </n-grid-item>
                     <n-grid-item>
-                      <n-form-item label="排序：">
+                      <n-form-item label="Urutkan:">
                         {{ group?.sort }}
                       </n-form-item>
                     </n-grid-item>
                     <n-grid-item>
-                      <n-form-item label="测试模型：">
+                      <n-form-item label="Model Tes:">
                         {{ group?.test_model }}
                       </n-form-item>
                     </n-grid-item>
                     <n-grid-item v-if="group?.channel_type !== 'gemini'">
-                      <n-form-item label="测试路径：">
+                      <n-form-item label="Jalur Tes:">
                         {{ group?.validation_endpoint }}
                       </n-form-item>
                     </n-grid-item>
                     <n-grid-item :span="2">
-                      <n-form-item label="代理密钥：">
+                      <n-form-item label="Kunci Proxy:">
                         <div class="proxy-keys-content">
                           <span class="key-text">{{ proxyKeysDisplay }}</span>
                           <n-button-group size="small" class="key-actions" v-if="group?.proxy_keys">
@@ -456,7 +458,7 @@ function resetPage() {
                                   </template>
                                 </n-button>
                               </template>
-                              {{ showProxyKeys ? "隐藏密钥" : "显示密钥" }}
+                              {{ showProxyKeys ? "Sembunyikan Kunci" : "Tampilkan Kunci" }}
                             </n-tooltip>
                             <n-tooltip trigger="hover">
                               <template #trigger>
@@ -466,14 +468,14 @@ function resetPage() {
                                   </template>
                                 </n-button>
                               </template>
-                              复制密钥
+                              Salin Kunci
                             </n-tooltip>
                           </n-button-group>
                         </div>
                       </n-form-item>
                     </n-grid-item>
                     <n-grid-item :span="2">
-                      <n-form-item label="描述：">
+                      <n-form-item label="Deskripsi:">
                         <div class="description-content">
                           {{ group?.description || "-" }}
                         </div>
@@ -484,16 +486,16 @@ function resetPage() {
               </div>
 
               <div class="detail-section">
-                <h4 class="section-title">上游地址</h4>
+                <h4 class="section-title">Alamat Upstream</h4>
                 <n-form label-placement="left" label-width="100px">
                   <n-form-item
                     v-for="(upstream, index) in group?.upstreams ?? []"
                     :key="index"
                     class="upstream-item"
-                    :label="`上游 ${index + 1}:`"
+                    :label="`Upstream ${index + 1}:`"
                   >
                     <span class="upstream-weight">
-                      <n-tag size="small" type="info">权重: {{ upstream.weight }}</n-tag>
+                      <n-tag size="small" type="info">Bobot: {{ upstream.weight }}</n-tag>
                     </span>
                     <n-input class="upstream-url" :value="upstream.url" readonly size="small" />
                   </n-form-item>
@@ -506,7 +508,7 @@ function resetPage() {
                   (group?.config && Object.keys(group.config).length > 0) || group?.param_overrides
                 "
               >
-                <h4 class="section-title">高级配置</h4>
+                <h4 class="section-title">Konfigurasi Lanjutan</h4>
                 <n-form label-placement="left">
                   <n-form-item v-for="(value, key) in group?.config || {}" :key="key">
                     <template #label>
@@ -527,13 +529,13 @@ function resetPage() {
                         <div class="config-tooltip">
                           <div class="tooltip-title">{{ getConfigDisplayName(key) }}</div>
                           <div class="tooltip-description">{{ getConfigDescription(key) }}</div>
-                          <div class="tooltip-key">配置键: {{ key }}</div>
+                          <div class="tooltip-key">Kunci Konfigurasi: {{ key }}</div>
                         </div>
                       </n-tooltip>
                     </template>
                     {{ value || "-" }}
                   </n-form-item>
-                  <n-form-item v-if="group?.param_overrides" label="参数覆盖:" :span="2">
+                  <n-form-item v-if="group?.param_overrides" label="Timpa Parameter:" :span="2">
                     <pre class="config-json">{{
                       JSON.stringify(group?.param_overrides || "", null, 2)
                     }}</pre>
