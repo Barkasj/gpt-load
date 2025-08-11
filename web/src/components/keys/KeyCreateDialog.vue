@@ -91,7 +91,7 @@ async function handleSubmit() {
 
       <template #footer>
         <div style="display: flex; justify-content: flex-end; gap: 12px">
-          <n-button @click="handleClose">取消</n-button>
+          <n-button @click="handleClose">Batal</n-button>
           <n-button type="primary" @click="handleSubmit" :loading="loading" :disabled="!keysText">
             Buat
           </n-button>
