@@ -153,12 +153,12 @@ func (s *Server) Chart(c *gin.Context) {
 		Labels: labels,
 		Datasets: []models.ChartDataset{
 			{
-				Label: "成功请求",
+				Label: "Permintaan Berhasil",
 				Data:  successData,
 				Color: "rgba(10, 200, 110, 1)",
 			},
 			{
-				Label: "失败请求",
+				Label: "Permintaan Gagal",
 				Data:  failureData,
 				Color: "rgba(255, 70, 70, 1)",
 			},
