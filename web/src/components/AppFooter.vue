@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { versionService, type VersionInfo } from "@/services/version";
 import {
-  BugOutline,
   ChatbubbleOutline,
   CheckmarkCircleOutline,
   DocumentTextOutline,
-  LogoGithub,
   TimeOutline,
   WarningOutline,
 } from "@vicons/ionicons5";
