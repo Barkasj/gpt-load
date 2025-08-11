@@ -54,7 +54,7 @@ async function handleSubmit() {
 
     const res = await keysApi.deleteKeys(props.groupId, keysText.value);
     const { deleted_count, ignored_count, total_in_group } = res || {};
-    const msg = `成功删除 ${deleted_count} 个密钥，忽略 ${ignored_count} 个密钥。当前分组共有 ${total_in_group} 个密钥。`;
+    const msg = `Berhasil menghapus ${deleted_count} kunci, mengabaikan ${ignored_count} kunci. Grup saat ini memiliki total ${total_in_group} kunci.`;
     message.info(msg, {
       closable: true,
       duration: 5000,
@@ -72,7 +72,7 @@ async function handleSubmit() {
   <n-modal :show="show" @update:show="handleClose" class="form-modal">
     <n-card
       style="width: 800px"
-      :title="`删除 ${groupName || '当前分组'} 的密钥`"
+      :title="`Hapus kunci untuk ${groupName || 'grup saat ini'}`"
       :bordered="false"
       size="huge"
       role="dialog"
@@ -89,7 +89,7 @@ async function handleSubmit() {
       <n-input
         v-model:value="keysText"
         type="textarea"
-        placeholder="输入要删除的密钥，每行一个"
+        placeholder="Masukkan kunci yang akan dihapus, satu per baris"
         :rows="8"
         style="margin-top: 20px"
       />
@@ -98,7 +98,7 @@ async function handleSubmit() {
         <div style="display: flex; justify-content: flex-end; gap: 12px">
           <n-button @click="handleClose">取消</n-button>
           <n-button type="error" @click="handleSubmit" :loading="loading" :disabled="!keysText">
-            删除
+            Hapus
           </n-button>
         </div>
       </template>
