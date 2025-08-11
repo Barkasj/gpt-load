@@ -24,27 +24,27 @@ const versionInfo = ref<VersionInfo>({
 
 const isChecking = ref(false);
 
-// 版本状态配置
+// Konfigurasi status versi
 const statusConfig = {
   checking: {
     color: "#0066cc",
     icon: TimeOutline,
-    text: "检查中...",
+    text: "Memeriksa...",
   },
   latest: {
     color: "#18a058",
     icon: CheckmarkCircleOutline,
-    text: "最新版本",
+    text: "Versi terbaru",
   },
   "update-available": {
     color: "#f0a020",
     icon: WarningOutline,
-    text: "有更新",
+    text: "Pembaruan tersedia",
   },
   error: {
     color: "#d03050",
     icon: WarningOutline,
-    text: "检查失败",
+    text: "Pemeriksaan gagal",
   },
 };
 
@@ -85,17 +85,17 @@ onMounted(() => {
 <template>
   <footer class="app-footer">
     <div class="footer-container">
-      <!-- 主要信息区 -->
+      <!-- Area informasi utama -->
       <div class="footer-main">
         <span class="project-info">
           <a href="https://github.com/tbphp/gpt-load" target="_blank" rel="noopener noreferrer">
-            <b>GPT-Load</b>
+            <b></b>
           </a>
         </span>
 
         <n-divider vertical />
 
-        <!-- 版本信息 -->
+        <!-- Informasi versi -->
         <div
           class="version-container"
           :class="{
@@ -126,7 +126,7 @@ onMounted(() => {
 
         <n-divider vertical />
 
-        <!-- 链接区 -->
+        <!-- Area tautan -->
         <div class="links-container">
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
@@ -137,40 +137,10 @@ onMounted(() => {
                 class="footer-link"
               >
                 <n-icon :component="DocumentTextOutline" :size="14" class="link-icon" />
-                <span>文档</span>
+                <span>Dokumentasi</span>
               </a>
             </template>
-            官方文档
-          </n-tooltip>
-
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <a
-                href="https://github.com/tbphp/gpt-load"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="footer-link"
-              >
-                <n-icon :component="LogoGithub" :size="14" class="link-icon" />
-                <span>GitHub</span>
-              </a>
-            </template>
-            查看源码
-          </n-tooltip>
-
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <a
-                href="https://github.com/tbphp/gpt-load/issues"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="footer-link"
-              >
-                <n-icon :component="BugOutline" :size="14" class="link-icon" />
-                <span>反馈</span>
-              </a>
-            </template>
-            问题反馈
+            Dokumentasi Resmi
           </n-tooltip>
 
           <n-tooltip trigger="hover" placement="top">
@@ -185,26 +155,8 @@ onMounted(() => {
                 <span>Telegram</span>
               </a>
             </template>
-            加入群组
+            Gabung Grup
           </n-tooltip>
-        </div>
-
-        <n-divider vertical />
-
-        <!-- 版权信息 -->
-        <div class="copyright-container">
-          <span class="copyright-text">
-            © 2025 by
-            <a
-              href="https://github.com/tbphp"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="author-link"
-            >
-              tbphp
-            </a>
-          </span>
-          <span class="license-text">MIT License</span>
         </div>
       </div>
     </div>
