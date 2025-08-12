@@ -15,29 +15,29 @@ type ConfigManager interface {
 	ReloadConfig() error
 }
 
-// SystemSettings 定义所有系统配置项
+// SystemSettings defines all system configuration items
 type SystemSettings struct {
-	// 基础参数
-	AppUrl                         string `json:"app_url" default:"http://localhost:3001" name:"项目地址" category:"基础参数" desc:"项目的基础 URL，用于拼接分组终端节点地址。系统配置优先于环境变量 APP_URL。" validate:"required"`
-	RequestLogRetentionDays        int    `json:"request_log_retention_days" default:"7" name:"日志保留时长（天）" category:"基础参数" desc:"请求日志在数据库中的保留天数，0为不清理日志。" validate:"required,min=0"`
-	RequestLogWriteIntervalMinutes int    `json:"request_log_write_interval_minutes" default:"1" name:"日志延迟写入周期（分钟）" category:"基础参数" desc:"请求日志从缓存写入数据库的周期（分钟），0为实时写入数据。" validate:"required,min=0"`
-	ProxyKeys                      string `json:"proxy_keys" name:"全局代理密钥" category:"基础参数" desc:"全局代理密钥，用于访问所有分组的代理端点。多个密钥请用逗号分隔。" validate:"required"`
+	// Parameter Dasar
+	AppUrl                         string `json:"app_url" default:"http://localhost:3001" name:"Alamat Proyek" category:"Parameter Dasar" desc:"URL dasar proyek, digunakan untuk menyusun alamat endpoint grup. Konfigurasi sistem diprioritaskan dibanding variabel lingkungan APP_URL." validate:"required"`
+	RequestLogRetentionDays        int    `json:"request_log_retention_days" default:"7" name:"Durasi Simpan Log (hari)" category:"Parameter Dasar" desc:"Jumlah hari log permintaan disimpan di database; 0 berarti tidak dilakukan pembersihan." validate:"required,min=0"`
+	RequestLogWriteIntervalMinutes int    `json:"request_log_write_interval_minutes" default:"1" name:"Periode Penulisan Log Tertunda (menit)" category:"Parameter Dasar" desc:"Periode (menit) untuk menulis log permintaan dari cache ke database; 0 berarti tulis real-time." validate:"required,min=0"`
+	ProxyKeys                      string `json:"proxy_keys" name:"Kunci Proksi Global" category:"Parameter Dasar" desc:"Kunci proksi global untuk mengakses semua endpoint grup. Pisahkan beberapa kunci dengan koma." validate:"required"`
 
-	// 请求设置
-	RequestTimeout        int    `json:"request_timeout" default:"600" name:"请求超时（秒）" category:"请求设置" desc:"转发请求的完整生命周期超时（秒）等。" validate:"required,min=1"`
-	ConnectTimeout        int    `json:"connect_timeout" default:"15" name:"连接超时（秒）" category:"请求设置" desc:"与上游服务建立新连接的超时时间（秒）。" validate:"required,min=1"`
-	IdleConnTimeout       int    `json:"idle_conn_timeout" default:"120" name:"空闲连接超时（秒）" category:"请求设置" desc:"HTTP 客户端中空闲连接的超时时间（秒）。" validate:"required,min=1"`
-	ResponseHeaderTimeout int    `json:"response_header_timeout" default:"600" name:"响应头超时（秒）" category:"请求设置" desc:"等待上游服务响应头的最长时间（秒）。" validate:"required,min=1"`
-	MaxIdleConns          int    `json:"max_idle_conns" default:"100" name:"最大空闲连接数" category:"请求设置" desc:"HTTP 客户端连接池中允许的最大空闲连接总数。" validate:"required,min=1"`
-	MaxIdleConnsPerHost   int    `json:"max_idle_conns_per_host" default:"50" name:"每主机最大空闲连接数" category:"请求设置" desc:"HTTP 客户端连接池对每个上游主机允许的最大空闲连接数。" validate:"required,min=1"`
-	ProxyURL              string `json:"proxy_url" name:"代理服务器地址" category:"请求设置" desc:"全局 HTTP/HTTPS 代理服务器地址，例如：http://user:pass@host:port。如果为空，则使用环境变量配置。"`
+	// Pengaturan Permintaan
+	RequestTimeout        int    `json:"request_timeout" default:"600" name:"Batas Waktu Permintaan (detik)" category:"Pengaturan Permintaan" desc:"Batas waktu (detik) untuk keseluruhan siklus hidup permintaan yang diteruskan." validate:"required,min=1"`
+	ConnectTimeout        int    `json:"connect_timeout" default:"15" name:"Batas Waktu Koneksi (detik)" category:"Pengaturan Permintaan" desc:"Batas waktu (detik) untuk membuat koneksi baru ke layanan upstream." validate:"required,min=1"`
+	IdleConnTimeout       int    `json:"idle_conn_timeout" default:"120" name:"Batas Waktu Koneksi Menganggur (detik)" category:"Pengaturan Permintaan" desc:"Batas waktu (detik) koneksi menganggur pada klien HTTP." validate:"required,min=1"`
+	ResponseHeaderTimeout int    `json:"response_header_timeout" default:"600" name:"Batas Waktu Header Respons (detik)" category:"Pengaturan Permintaan" desc:"Waktu maksimum (detik) menunggu header respons dari layanan upstream." validate:"required,min=1"`
+	MaxIdleConns          int    `json:"max_idle_conns" default:"100" name:"Maksimum Koneksi Menganggur" category:"Pengaturan Permintaan" desc:"Jumlah maksimum total koneksi menganggur yang diizinkan di pool koneksi klien HTTP." validate:"required,min=1"`
+	MaxIdleConnsPerHost   int    `json:"max_idle_conns_per_host" default:"50" name:"Maksimum Koneksi Menganggur per Host" category:"Pengaturan Permintaan" desc:"Jumlah maksimum koneksi menganggur untuk tiap host upstream pada pool klien HTTP." validate:"required,min=1"`
+	ProxyURL              string `json:"proxy_url" name:"Alamat Server Proksi" category:"Pengaturan Permintaan" desc:"Alamat server proksi HTTP/HTTPS global, contoh: http://user:pass@host:port. Jika kosong, gunakan konfigurasi dari variabel lingkungan."`
 
-	// 密钥配置
-	MaxRetries                   int `json:"max_retries" default:"3" name:"最大重试次数" category:"密钥配置" desc:"单个请求使用不同 Key 的最大重试次数，0为不重试。" validate:"required,min=0"`
-	BlacklistThreshold           int `json:"blacklist_threshold" default:"3" name:"黑名单阈值" category:"密钥配置" desc:"一个 Key 连续失败多少次后进入黑名单，0为不拉黑。" validate:"required,min=0"`
-	KeyValidationIntervalMinutes int `json:"key_validation_interval_minutes" default:"60" name:"密钥验证间隔（分钟）" category:"密钥配置" desc:"后台验证密钥的默认间隔（分钟）。" validate:"required,min=1"`
-	KeyValidationConcurrency     int `json:"key_validation_concurrency" default:"10" name:"密钥验证并发数" category:"密钥配置" desc:"后台定时验证无效 Key 时的并发数，如果使用SQLite或者运行环境性能不佳，请尽量保证20以下，避免过高的并发导致数据不一致问题。" validate:"required,min=1"`
-	KeyValidationTimeoutSeconds  int `json:"key_validation_timeout_seconds" default:"20" name:"密钥验证超时（秒）" category:"密钥配置" desc:"后台定时验证单个 Key 时的 API 请求超时时间（秒）。" validate:"required,min=1"`
+	// Konfigurasi Kunci
+	MaxRetries                   int `json:"max_retries" default:"3" name:"Jumlah Ulangi Maksimum" category:"Konfigurasi Kunci" desc:"Jumlah percobaan ulang maksimum untuk satu permintaan dengan kunci berbeda; 0 berarti tidak mengulang." validate:"required,min=0"`
+	BlacklistThreshold           int `json:"blacklist_threshold" default:"3" name:"Ambang Daftar Hitam" category:"Konfigurasi Kunci" desc:"Jumlah kegagalan beruntun sebelum suatu kunci dimasukkan ke daftar hitam; 0 berarti tidak diblokir." validate:"required,min=0"`
+	KeyValidationIntervalMinutes int `json:"key_validation_interval_minutes" default:"60" name:"Interval Validasi Kunci (menit)" category:"Konfigurasi Kunci" desc:"Interval bawaan (menit) untuk memvalidasi kunci di latar belakang." validate:"required,min=1"`
+	KeyValidationConcurrency     int `json:"key_validation_concurrency" default:"10" name:"Jumlah Paralel Validasi Kunci" category:"Konfigurasi Kunci" desc:"Jumlah paralel saat validasi terjadwal terhadap kunci tidak valid di latar belakang. Jika memakai SQLite atau performa lingkungan kurang, jaga di bawah 20 untuk menghindari ketidakkonsistenan data." validate:"required,min=1"`
+	KeyValidationTimeoutSeconds  int `json:"key_validation_timeout_seconds" default:"20" name:"Batas Waktu Validasi Kunci (detik)" category:"Konfigurasi Kunci" desc:"Batas waktu permintaan API (detik) saat memvalidasi satu kunci pada proses latar belakang." validate:"required,min=1"`
 
 	// For cache
 	ProxyKeysMap map[string]struct{} `json:"-"`
