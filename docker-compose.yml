@@ -1,16 +1,19 @@
 services:
+  # Layanan aplikasi utama gpt-load
   gpt-load:
-    # image: ghcr.io/tbphp/gpt-load:latest
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: barkah
+    container_name: barkah-gpt-load
     ports:
+      # Memetakan port dari .env (default 3001) ke mesin lokal Anda
       - "${PORT:-3001}:${PORT:-3001}"
     env_file:
+      # Menggunakan file .env untuk konfigurasi
       - .env
     restart: always
     volumes:
+      # Menyimpan data persisten (log, db sqlite jika digunakan) di luar container
       - ./data:/app/data
     stop_grace_period: ${SERVER_GRACEFUL_SHUTDOWN_TIMEOUT:-10}s
     healthcheck:
@@ -18,38 +21,28 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 40s
     depends_on:
       postgres:
         condition: service_healthy
-        restart: true
       redis:
         condition: service_healthy
-        restart: true
-    deploy:
-      resources:
-        limits:
-          cpus: '2.0'
-          memory: 4G
-        reservations:
-          cpus: '0.5'
-          memory: 512M
 
   postgres:
     image: "postgres:16"
     container_name: gpt-load-postgres
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: pasword
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
       POSTGRES_DB: gpt-load
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d gpt-load"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d gpt-load"]
       interval: 5s
       timeout: 5s
       retries: 10
 
+  # Layanan cache Redis
   redis:
     image: redis:latest
     container_name: gpt-load-redis
