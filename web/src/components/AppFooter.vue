@@ -1,83 +1,6 @@
 <script setup lang="ts">
-import { versionService, type VersionInfo } from "@/services/version";
-import {
-  ChatbubbleOutline,
-  CheckmarkCircleOutline,
-  DocumentTextOutline,
-  TimeOutline,
-  WarningOutline,
-} from "@vicons/ionicons5";
+import { ChatbubbleOutline } from "@vicons/ionicons5";
 import { NIcon, NTooltip } from "naive-ui";
-import { onMounted, ref } from "vue";
-
-const versionInfo = ref<VersionInfo>({
-  currentVersion: "0.1.0",
-  latestVersion: null,
-  isLatest: false,
-  hasUpdate: false,
-  releaseUrl: null,
-  lastCheckTime: 0,
-  status: "checking",
-});
-
-const isChecking = ref(false);
-
-// Konfigurasi status versi
-const statusConfig = {
-  checking: {
-    color: "#0066cc",
-    icon: TimeOutline,
-    text: "Memeriksa...",
-  },
-  latest: {
-    color: "#18a058",
-    icon: CheckmarkCircleOutline,
-    text: "Versi terbaru",
-  },
-  "update-available": {
-    color: "#f0a020",
-    icon: WarningOutline,
-    text: "Pembaruan tersedia",
-  },
-  error: {
-    color: "#d03050",
-    icon: WarningOutline,
-    text: "Pemeriksaan gagal",
-  },
-};
-
-const formatVersion = (version: string): string => {
-  return version.startsWith("v") ? version : `v${version}`;
-};
-
-const checkVersion = async () => {
-  if (isChecking.value) {
-    return;
-  }
-
-  isChecking.value = true;
-  try {
-    const result = await versionService.checkForUpdates();
-    versionInfo.value = result;
-  } catch (error) {
-    console.warn("Version check failed:", error);
-  } finally {
-    isChecking.value = false;
-  }
-};
-
-const handleVersionClick = () => {
-  if (
-    (versionInfo.value.status === "update-available" || versionInfo.value.status === "latest") &&
-    versionInfo.value.releaseUrl
-  ) {
-    window.open(versionInfo.value.releaseUrl, "_blank", "noopener,noreferrer");
-  }
-};
-
-onMounted(() => {
-  checkVersion();
-});
 </script>
 
 <template>
@@ -85,75 +8,22 @@ onMounted(() => {
     <div class="footer-container">
       <!-- Area informasi utama -->
       <div class="footer-main">
-        <span class="project-info">
-          <a href="https://github.com/tbphp/gpt-load" target="_blank" rel="noopener noreferrer">
-            <b></b>
-          </a>
-        </span>
-
-        <n-divider vertical />
-
-        <!-- Informasi versi -->
-        <div
-          class="version-container"
-          :class="{
-            'version-clickable':
-              versionInfo.status === 'update-available' || versionInfo.status === 'latest',
-            'version-checking': isChecking,
-          }"
-          @click="handleVersionClick"
-        >
-          <n-icon
-            v-if="statusConfig[versionInfo.status].icon"
-            :component="statusConfig[versionInfo.status].icon"
-            :color="statusConfig[versionInfo.status].color"
-            :size="14"
-            class="version-icon"
-          />
-          <span class="version-text">
-            {{ formatVersion(versionInfo.currentVersion) }}
-            -
-            <span :style="{ color: statusConfig[versionInfo.status].color }">
-              {{ statusConfig[versionInfo.status].text }}
-              <template v-if="versionInfo.status === 'update-available'">
-                [{{ formatVersion(versionInfo.latestVersion || "") }}]
-              </template>
-            </span>
-          </span>
-        </div>
-
-        <n-divider vertical />
 
         <!-- Area tautan -->
         <div class="links-container">
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <a
-                href="https://www.gpt-load.com/docs"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="footer-link"
-              >
-                <n-icon :component="DocumentTextOutline" :size="14" class="link-icon" />
-                <span>Dokumentasi</span>
-              </a>
-            </template>
-            Dokumentasi Resmi
-          </n-tooltip>
-
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <a
-                href="https://t.me/+GHpy5SwEllg3MTUx"
+                href="https://wa.me/6281392492669?text=Halo%20Admin"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="footer-link"
               >
                 <n-icon :component="ChatbubbleOutline" :size="14" class="link-icon" />
-                <span>Telegram</span>
+                <span>WhatsApp</span>
               </a>
             </template>
-            Gabung Grup
+            Hubungi Kami
           </n-tooltip>
         </div>
       </div>
